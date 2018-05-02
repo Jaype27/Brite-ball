@@ -1,2 +1,1 @@
-# MusicDash
-Working Title
+# Brite-Ball
