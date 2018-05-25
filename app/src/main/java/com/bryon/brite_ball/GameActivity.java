@@ -29,7 +29,7 @@ public class GameActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
 
-        m_gameView = new GameView(this);
+        m_gameView = new GameView(this, size.x, size.y);
         setContentView(m_gameView);
 
     }
