@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -22,7 +23,6 @@ public class GameView extends SurfaceView implements Runnable {
     private volatile boolean m_playing;
     private Thread m_gameThread = null;
 
-    int gameLevel = 1;
     int gameScore = 0;
     int gameHighScore = 0;
 
@@ -32,19 +32,24 @@ public class GameView extends SurfaceView implements Runnable {
     private Bitmap spriteBall;
     private Bitmap spriteNet;
 
-    private Paint assetPaint;
+    private Paint mPaint;
+    private Path mPath;
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE = 4;
 
     public GameView(Context context, int screenW, int screenH) {
         super(context);
 
         m_holder = getHolder();
         m_paint = new Paint();
-        assetPaint = new Paint();
+        mPaint = new Paint();
 
         spriteBall = BitmapFactory.decodeResource(context.getResources(), R.drawable.neonball);
-        spriteBall = Bitmap.createScaledBitmap(spriteBall, screenW/4, screenH/8, false);
+        spriteBall = Bitmap.createScaledBitmap(spriteBall, screenW/4, screenH/8, true);
         spriteNet = BitmapFactory.decodeResource(context.getResources(), R.drawable.neonnet);
-        spriteNet = Bitmap.createScaledBitmap(spriteNet, screenW/2, screenH/3, false);
+        spriteNet = Bitmap.createScaledBitmap(spriteNet, screenW/2, screenH/3, true);
+
+        mPath = new Path();
     }
 
     @Override
@@ -74,15 +79,17 @@ public class GameView extends SurfaceView implements Runnable {
 
             m_canvas.drawColor(Color.argb(255, 255, 255, 255));
 
-            m_canvas.drawText("Level: " + gameLevel, 30, 50, m_paint);
-            m_canvas.drawText("Score: " + gameScore, 30, 100, m_paint);
+            m_canvas.drawText("Score: " + gameScore, 0, 50, m_paint);
 
-            m_canvas.drawBitmap(spriteBall, 300, 300, m_paint);
-            m_canvas.drawBitmap(spriteNet, 100, 100, m_paint);
+            m_canvas.drawBitmap(spriteBall, 700, 300, m_paint);
+            m_canvas.drawBitmap(spriteNet, 50, 800, m_paint);
 
             m_holder.unlockCanvasAndPost(m_canvas);
         }
     }
+
+
+
 
 
 
